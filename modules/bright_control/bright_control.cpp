@@ -8,13 +8,16 @@
 
 //=====[Declaration of private defines]========================================
 
-#define LEDS_QUANTITY 3
+#define LEDS_QUANTITY 2
 
 //=====[Declaration of private data types]=====================================
 
 //=====[Declaration and initialization of public global objects]===============
 
-DigitalOut RGBLed[] = {(PB_4), (PA_0), (PD_12)};
+//configurando los pines de salida puedo elegir usar los led de usauario de la placa
+//probamos la intensidad del led2 de la placa mapeado a PB_7
+DigitalOut RGBLed[] = {(PB_4), (PB_14), (PD_12)};
+
 
 Ticker tickerBrightControl;
 
@@ -43,16 +46,20 @@ static void tickerCallbackBrightControl( );
 
 void brightControlInit()
 {
+    //el metodo attach llama al metodo tickerCallbackBrightControl a intervalos definidos en el segundo atributo
+    //el modod de funcionamiento de esta implementacion es utilizar el metodo attach que a su vez 
+    //utiliza la clase chrono de std para cambiar el valor de la salida del pin a intervalos regulares de tiempo 
+    //lo que hace es llamar a intervalos regulares dependiendo de un valor de entrada analogica
     tickerBrightControl.attach( tickerCallbackBrightControl, 
                               ( (float) tickRateMSBrightControl) / 1000.0 );
 
     setPeriod( RGB_LED_RED, 0.01f );
     setPeriod( RGB_LED_GREEN, 0.01f );
-    setPeriod( RGB_LED_BLUE, 0.01f );
+    //setPeriod( RGB_LED_BLUE, 0.01f );
 
     setDutyCycle( RGB_LED_RED, 0.5f );
     setDutyCycle( RGB_LED_GREEN, 0.5f );
-    setDutyCycle( RGB_LED_BLUE, 0.5f );
+    //setDutyCycle( RGB_LED_BLUE, 0.5f );
 }
 
 void setDutyCycle( lightSystem_t light, float dutyCycle )

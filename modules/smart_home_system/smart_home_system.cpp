@@ -32,7 +32,7 @@
 //=====[Implementations of public functions]===================================
 
 void smartHomeSystemInit()
-{
+{ 
     userInterfaceInit();
     alarmInit();
     fireAlarmInit();
@@ -45,6 +45,9 @@ void smartHomeSystemInit()
 
 void smartHomeSystemUpdate()
 {
+    static int i=0;
+    DigitalOut led= (LED2);
+    if(i ==0) led.write(ON);
     userInterfaceUpdate();
     fireAlarmUpdate();
     intruderAlarmUpdate();
@@ -53,6 +56,19 @@ void smartHomeSystemUpdate()
     pcSerialComUpdate();
     motorControlUpdate();
     lightSystemUpdate();
+
+    if ( led.read() == ON ) {
+        if( i > PERIOD/2 ) {
+            i = 1;
+           led.write(OFF);        
+        }
+    } 
+    else {
+        if( i > PERIOD/2 ) {
+            i = 1;
+            led.write(ON); 
+        }    
+    }
     delay(SYSTEM_TIME_INCREMENT_MS);
 }
 
